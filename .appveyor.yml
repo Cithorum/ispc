@@ -5,7 +5,7 @@
 configuration: Release
 
 environment:
-  LLVM_LATEST: 15.0
+  LLVM_LATEST: 10.0
   DOCKER_PATH: "ispc/test_repo"
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
