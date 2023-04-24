@@ -52,7 +52,7 @@ for:
         %NONEEDDOCKER% docker cp %CONTAINER%:%CROSS_TOOLS% %CROSS_TOOLS%
         set PATH=%LLVM_HOME%\bin;%PATH%
         mkdir %LLVM_HOME% && cd %LLVM_HOME%
-        wget -q https://github.com/Cithorum/LLVM-Build/releases/download/untagged-a85b80ae8209c385cd7a/%LLVM_TAR%
+        wget -q https://github.com/Cithorum/LLVM-Build/releases/download/v1/%LLVM_TAR%
         7z.exe x -t7z %LLVM_TAR%
         7z.exe x -ttar llvm*tar
         set PATH=%LLVM_HOME%\bin-%LLVM_VERSION%\bin;%PATH%
@@ -103,7 +103,7 @@ for:
           sudo docker cp $CONTAINER:$CROSS_TOOLS $CROSS_TOOLS
         fi
         mkdir $LLVM_HOME && cd $LLVM_HOME
-        wget https://github.com/Cithorum/LLVM-Build/releases/download/untagged-a85b80ae8209c385cd7a/$LLVM_TAR
+        wget https://github.com/Cithorum/LLVM-Build/releases/download/v1/$LLVM_TAR
         tar xvf $LLVM_TAR
         export PATH=$LLVM_HOME/bin-$LLVM_VERSION/bin:$PATH
   before_build:
