@@ -89,7 +89,7 @@ for:
   install:
     - sh: |-
         sudo apt-get update
-        sudo apt-get install -y flex libncurses-dev libc6-dev-i386 g++-multilib lib32stdc++6 libtbb-dev
+        sudo apt-get install -y flex libc6-dev-i386 g++-multilib lib32stdc++6 libtbb-dev
         if [ "$LLVM_VERSION" = "latest" ]; then
           export LLVM_VERSION=$LLVM_LATEST
           export WASM=ON
@@ -106,6 +106,7 @@ for:
         wget https://github.com/Cithorum/LLVM-Build/releases/download/v1/$LLVM_TAR
         tar xvf $LLVM_TAR
         export PATH=$LLVM_HOME/bin-$LLVM_VERSION/bin:$PATH
+        sudo ln -sf /lib/x86_64-linux-gnu/libtinfo.so /lib/x86_64-linux-gnu/libtinfo.so.6
   before_build:
     - sh: |-
         cd $ISPC_HOME && mkdir build && cd build
