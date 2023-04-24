@@ -8,7 +8,7 @@ environment:
   LLVM_LATEST: 10.0
   DOCKER_PATH: "ispc/test_repo"
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
       LLVM_VERSION: latest
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       LLVM_VERSION: latest
@@ -78,7 +78,7 @@ for:
 -
   matrix:
     only:
-      - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+      - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
   init:
     - sh: |-
         export ISPC_HOME=$APPVEYOR_BUILD_FOLDER
@@ -106,7 +106,6 @@ for:
         wget https://github.com/Cithorum/LLVM-Build/releases/download/v1/$LLVM_TAR
         tar xvf $LLVM_TAR
         export PATH=$LLVM_HOME/bin-$LLVM_VERSION/bin:$PATH
-        sudo ln -sf /lib/x86_64-linux-gnu/libtinfo.so /lib/x86_64-linux-gnu/libtinfo.so.6
   before_build:
     - sh: |-
         cd $ISPC_HOME && mkdir build && cd build
