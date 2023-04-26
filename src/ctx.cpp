@@ -328,7 +328,7 @@ FunctionEmitContext::FunctionEmitContext(Function *func, Symbol *funSym, llvm::F
             llvm::BasicBlock *offBB = llvm::BasicBlock::Create(*g->ctx, "entry", (llvm::Function *)offFunc, 0);
             llvm::StoreInst *inst = new llvm::StoreInst(LLVMMaskAllOff, globalAllOnMaskPtr, offBB);
             if (g->opt.forceAlignedMemory) {
-                inst->setAlignment(llvm::MaybeAlign(g->target->getNativeVectorAlignment()).valueOrOne());
+                inst->setAlignment(1);
             }
             llvm::ReturnInst::Create(*g->ctx, offBB);
         }
@@ -2320,7 +2320,7 @@ llvm::Value *FunctionEmitContext::LoadInst(AddressInfo *ptrInfo, const Type *typ
                            name.isTriviallyEmpty() ? (llvm::Twine(ptr->getName()) + "_load") : name, bblock);
 
     if (g->opt.forceAlignedMemory && llvm::dyn_cast<llvm::VectorType>(ptrInfo->getElementType())) {
-        inst->setAlignment(llvm::MaybeAlign(g->target->getNativeVectorAlignment()).valueOrOne());
+        inst->setAlignment(1);
     }
 
     AddDebugPos(inst);
@@ -2451,7 +2451,7 @@ llvm::Value *FunctionEmitContext::LoadInst(llvm::Value *ptr, llvm::Value *mask, 
                 // vs the proper alignment in practice.)
                 int align = 1;
 
-                inst->setAlignment(llvm::MaybeAlign(align).valueOrOne());
+                inst->setAlignment(1);
             }
 
             AddDebugPos(inst);
@@ -2690,7 +2690,7 @@ AddressInfo *FunctionEmitContext::AllocaInst(llvm::Type *llvmType, llvm::Value *
         align = g->target->getNativeVectorAlignment();
 
     if (align != 0) {
-        inst->setAlignment(llvm::MaybeAlign(align).valueOrOne());
+        inst->setAlignment(1);
     }
     return new AddressInfo(inst, llvmType);
     ;
@@ -2727,7 +2727,7 @@ AddressInfo *FunctionEmitContext::AllocaInst(llvm::Type *llvmType, const llvm::T
         align = g->target->getNativeVectorAlignment();
 
     if (align != 0) {
-        inst->setAlignment(llvm::MaybeAlign(align).valueOrOne());
+        inst->setAlignment(1);
     }
     // Don't add debugging info to alloca instructions
     return new AddressInfo(inst, llvmType);
@@ -3007,7 +3007,7 @@ void FunctionEmitContext::StoreInst(llvm::Value *value, AddressInfo *ptrInfo, co
     llvm::StoreInst *inst = new llvm::StoreInst(value, ptr, bblock);
 
     if (g->opt.forceAlignedMemory && llvm::dyn_cast<llvm::VectorType>(ptrInfo->getElementType())) {
-        inst->setAlignment(llvm::MaybeAlign(g->target->getNativeVectorAlignment()).valueOrOne());
+        inst->setAlignment(1);
     }
 
     AddDebugPos(inst);
@@ -3882,7 +3882,7 @@ llvm::Constant *FunctionEmitContext::XeCreateConstantString(llvm::StringRef str,
                                         /* const */ true, llvm::GlobalValue::InternalLinkage, initializer, name,
                                         nullptr, llvm::GlobalVariable::NotThreadLocal,
                                         /* Constant Addrspace */ 2);
-    GV->setAlignment(llvm::MaybeAlign(g->target->getDataLayout()->getABITypeAlignment(initializer->getType())));
+    GV->setAlignment(1);
     GV->setUnnamedAddr(llvm::GlobalValue::UnnamedAddr::Global);
 
     return llvm::ConstantExpr::getInBoundsGetElementPtr(GV->getValueType(), GV,
