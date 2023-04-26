@@ -5,15 +5,15 @@
 configuration: Release
 
 environment:
-  LLVM_LATEST: 10.0
+  LLVM_LATEST: 11.1
   DOCKER_PATH: "ispc/test_repo"
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
       LLVM_VERSION: latest
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       LLVM_VERSION: latest
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      LLVM_VERSION: 14.0
+      LLVM_VERSION: 11.1
 
 for:
 -
@@ -31,7 +31,7 @@ for:
         if "%LLVM_VERSION%"=="latest" (set WASM=ON)
         if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2019" ( (set generator="Visual Studio 16") & (set vspath="C:\Program Files (x86)\Microsoft Visual Studio\2019"))
         if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2022" ( (set generator="Visual Studio 17") & (set vspath="C:\Program Files\Microsoft Visual Studio\2022"))
-        set LLVM_TAR=llvm-10.0.ubuntu18.04-Release+Asserts-x86.arm.wasm.tar.xz
+        set LLVM_TAR=llvm-11.1.0-win.vs2019-Release+Asserts-x86.arm.wasm.tar.7z
         if "%LLVM_VERSION%"=="14.0" (set LLVM_TAR=llvm-14.0.6-win.vs2019-Release+Asserts-x86.arm.wasm.tar.7z)
         if "%LLVM_VERSION%"=="13.0" (set LLVM_TAR=llvm-13.0.1-win.vs2019-Release+Asserts-x86.arm.wasm.tar.7z)
         if "%LLVM_VERSION%"=="12.0" (set LLVM_TAR=llvm-12.0.1-win.vs2019-Release+Asserts-x86.arm.wasm.tar.7z)
@@ -52,7 +52,7 @@ for:
         %NONEEDDOCKER% docker cp %CONTAINER%:%CROSS_TOOLS% %CROSS_TOOLS%
         set PATH=%LLVM_HOME%\bin;%PATH%
         mkdir %LLVM_HOME% && cd %LLVM_HOME%
-        wget -q https://github.com/Cithorum/LLVM-Build/releases/download/v1/%LLVM_TAR%
+        wget -q https://github.com/ispc/ispc.dependencies/releases/download/llvm-%LLVM_VERSION%-ispc-dev/%LLVM_TAR%
         7z.exe x -t7z %LLVM_TAR%
         7z.exe x -ttar llvm*tar
         set PATH=%LLVM_HOME%\bin-%LLVM_VERSION%\bin;%PATH%
@@ -78,14 +78,14 @@ for:
 -
   matrix:
     only:
-      - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+      - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
   init:
     - sh: |-
         export ISPC_HOME=$APPVEYOR_BUILD_FOLDER
         export LLVM_HOME=$APPVEYOR_BUILD_FOLDER/llvm
         export CROSS_TOOLS=/usr/local/src/cross
         export WASM=OFF
-        export LLVM_TAR=llvm-10.0.ubuntu18.04-Release+Asserts-x86.arm.wasm.tar.xz
+        export LLVM_TAR=llvm-11.1.0-ubuntu18.04-Release+Asserts-x86.arm.wasm.tar.xz
   install:
     - sh: |-
         sudo apt-get update
@@ -103,7 +103,7 @@ for:
           sudo docker cp $CONTAINER:$CROSS_TOOLS $CROSS_TOOLS
         fi
         mkdir $LLVM_HOME && cd $LLVM_HOME
-        wget https://github.com/Cithorum/LLVM-Build/releases/download/v1/$LLVM_TAR
+        wget https://github.com/ispc/ispc.dependencies/releases/download/llvm-$LLVM_VERSION-ispc-dev/$LLVM_TAR
         tar xvf $LLVM_TAR
         export PATH=$LLVM_HOME/bin-$LLVM_VERSION/bin:$PATH
   before_build:
